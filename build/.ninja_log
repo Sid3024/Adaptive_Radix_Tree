@@ -1,0 +1,20 @@
+# ninja log v7
+68	3992	7913696019447057	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	3330565e0dd56c34
+26	1363	7913716610761684	CMakeFiles/art_tests.dir/test/Node_test.cpp.obj	85275e9098b26313
+163	4993	7913696020427082	_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj	1730e992993cdca6
+43	1942	7913716610936614	CMakeFiles/art_tests.dir/test/ART_test.cpp.obj	3bf55d2efe46c857
+47	8227	7913696019228129	_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj	a676fe011a74f47c
+15	21282	7913696018910554	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	912831ca1f0d48e3
+21291	25539	7913696231656587	lib/libgtest.a	ea84f7f333bd69ab
+25553	25920	7913696274282473	lib/libgtest_main.a	c9236bea5b2949ad
+25540	25956	7913696274162119	lib/libgmock.a	9d014485dadcb764
+25956	26272	7913696278314862	lib/libgmock_main.a	64e57b99137a2c43
+12	658	7913717640676986	CMakeFiles/art.dir/src/ART.cpp.obj	4d390b97d3265465
+659	808	7913717647044459	libart.a	8f689211c0a8684d
+8	649	7913718891756770	CMakeFiles/art.dir/src/ART.cpp.obj	4d390b97d3265465
+650	785	7913718898167071	libart.a	8f689211c0a8684d
+20	1356	7913718891876820	CMakeFiles/art_tests.dir/test/Node_test.cpp.obj	85275e9098b26313
+35	1930	7913718892016795	CMakeFiles/art_tests.dir/test/ART_test.cpp.obj	3bf55d2efe46c857
+1931	2278	7913718910970625	art_tests.exe	25afade7692bbd7f
+13	1390	7913720367977689	CMakeFiles/art_tests.dir/test/Node_test.cpp.obj	85275e9098b26313
+1391	1666	7913720381754630	art_tests.exe	25afade7692bbd7f
