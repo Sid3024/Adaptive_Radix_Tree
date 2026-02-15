@@ -83,8 +83,8 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
             }
         }
         
-        add_child(new_node_ptr, existing_key[i], *node_dptr);
-        add_child(new_node_ptr, key[i], leaf);
+        add_child(new_node_ptr, custom_index_string(existing_key, i), *node_dptr); //what if existing_key.length < i?
+        add_child(new_node_ptr, custom_index_string(key, i), leaf); //what if key.length < i?
         replace(node_dptr, new_node_ptr);
         my_size++;
         my_total_node_count+=2; //adding both leaf and new_node
@@ -95,10 +95,10 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
         depth += prefix_match_len;
         Node* new_node_ptr = new Node4();
 
-        add_child(new_node_ptr, (*node_dptr)->prefix[prefix_match_len], *node_dptr);
-        add_child(new_node_ptr, key[depth], leaf);
+        add_child(new_node_ptr, custom_index_string((*node_dptr)->prefix, prefix_match_len), *node_dptr);
+        add_child(new_node_ptr, custom_index_string(key, depth), leaf);
 
-        Node4* inspect_node_ptr = static_cast<Node4*>(*node_dptr);
+        //Node4* inspect_node_ptr = static_cast<Node4*>(*node_dptr);
         
         memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
         new_node_ptr->prefixLen = prefix_match_len;
@@ -113,7 +113,7 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
     } else {
         depth += (*node_dptr)->prefixLen;
         Node** next_node_dptr = find_child_dptr(*node_dptr, key[depth]);
-        Node256* inspect_ptr = static_cast<Node256*>(*node_dptr);
+        //Node256* inspect_ptr = static_cast<Node256*>(*node_dptr);
         if (!next_node_dptr) {
             add_child(*node_dptr, key[depth], leaf);
             my_size++;
@@ -144,7 +144,7 @@ std::string ART::search_helper(Node* node_ptr, std::string key, int depth) const
         return "";
     } else {
         depth += node_ptr->prefixLen;
-        return search_helper(find_child(node_ptr, key[depth]), key, depth+1);
+        return search_helper(find_child(node_ptr, key[depth]), key, depth+1); //depth+1 bcos the prefixLen does not include the discriminating byte
     }
 }
 

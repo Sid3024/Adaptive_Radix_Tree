@@ -205,6 +205,9 @@ private:
     void radix_sort(data* data_arr, int start_idx, int end_idx, int depth, data* radix_sorted_arr, int* size_arr, int* idx_arr, bool* char_is_present_arr);
     void bulk_construct_helper(Node* root_node, int depth, data* data_arr, int start_idx, int end_idx, data* copy_to_arr);
     std::string search_helper(Node* node_ptr, std::string key, int depth) const;
+    char custom_index_string(std::string s, int i) { //returns null char if s.length == i, which is needed for ART logic
+        return (s.length() == i) ? '\0' : s[i];
+    }
     
     
 public:

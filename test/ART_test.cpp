@@ -125,11 +125,17 @@ TEST(ARTTest, DoubleInsert3) {
     EXPECT_EQ("bcdI", (tree.get_root())->read_prefix());
     EXPECT_EQ(4, (tree.get_root())->prefixLen);
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
+
+    EXPECT_EQ('J', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
+    
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
     EXPECT_EQ("bcdIJKL", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
     EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
 
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
+
+    EXPECT_EQ('x', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
+
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
     EXPECT_EQ("bcdIxyz", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
     EXPECT_EQ("hello world", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
@@ -143,6 +149,80 @@ TEST(ARTTest, DoubleSearch3) {
     
     EXPECT_EQ("hello world", tree.search("bcdIxyz"));
     EXPECT_EQ("bye", tree.search("bcdIJKL"));
+    EXPECT_EQ("", tree.search("cde"));
+    EXPECT_EQ("", tree.search(""));
+}
+
+TEST(ARTTest, DoubleInsert4) {
+    ART tree;
+    tree.insert("abc", "hello");
+    tree.insert("abcdef", "bye");
+    
+    EXPECT_EQ(2, tree.get_size());
+    EXPECT_EQ(3, tree.get_total_node_count());
+    EXPECT_EQ(NodeType::N4, (tree.get_root())->node_type);
+    EXPECT_EQ(2, (tree.get_root())->size);
+    EXPECT_EQ("abc", (tree.get_root())->read_prefix());
+    EXPECT_EQ(3, (tree.get_root())->prefixLen);
+
+    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
+    EXPECT_EQ('\0', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
+    EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
+    EXPECT_EQ("abc", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
+    EXPECT_EQ("hello", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
+
+    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
+    EXPECT_EQ('d', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
+    EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
+    EXPECT_EQ("abcdef", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
+    EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
+}
+
+TEST(ARTTest, DoubleSearch4) {
+    ART tree;
+    tree.insert("abc", "hello");
+    tree.insert("abcdef", "bye");
+
+    EXPECT_EQ("hello", tree.search("abc"));
+    EXPECT_EQ("bye", tree.search("abcdef"));
+    EXPECT_EQ("", tree.search("cde"));
+    EXPECT_EQ("", tree.search(""));
+}
+
+TEST(ARTTest, DoubleInsert5) {
+    ART tree;
+    tree.insert("abcdef", "hello");
+    tree.insert("abc", "bye");
+
+    EXPECT_EQ(2, tree.get_size());
+    EXPECT_EQ(3, tree.get_total_node_count());
+    EXPECT_EQ(NodeType::N4, (tree.get_root())->node_type);
+    EXPECT_EQ(2, (tree.get_root())->size);
+    EXPECT_EQ("abc", (tree.get_root())->read_prefix());
+    EXPECT_EQ(3, (tree.get_root())->prefixLen);
+
+    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
+    EXPECT_EQ('d', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
+    EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
+    EXPECT_EQ("abcdef", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
+    EXPECT_EQ("hello", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
+
+    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
+    EXPECT_EQ('\0', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
+    EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
+    EXPECT_EQ("abc", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
+    EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
+
+
+}
+
+TEST(ARTTest, DoubleSearch5) {
+    ART tree;
+    tree.insert("abcdef", "hello");
+    tree.insert("abc", "bye");
+
+    EXPECT_EQ("hello", tree.search("abcdef"));
+    EXPECT_EQ("bye", tree.search("abc"));
     EXPECT_EQ("", tree.search("cde"));
     EXPECT_EQ("", tree.search(""));
 }
