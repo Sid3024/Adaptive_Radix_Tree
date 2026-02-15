@@ -545,3 +545,79 @@ TEST(ARTTest, TripleSearch4) {
     EXPECT_EQ("", tree.search(""));
      
 }
+
+TEST(ARTTest, TripleInsert5) {
+    ART tree;
+    tree.insert("abcdghi", "hello");
+    tree.insert("abcdwxyz", "what");
+    tree.insert("abcxyz", "bye");
+    
+    EXPECT_EQ(3, tree.get_size());
+    EXPECT_EQ(5, tree.get_total_node_count());
+
+    //check root node exists and is N4
+    ASSERT_TRUE(tree.get_root());
+    ASSERT_EQ(NodeType::N4, (tree.get_root())->node_type);
+
+    //check root node attributes
+    Node4* root_node = static_cast<Node4*>(tree.get_root());
+    EXPECT_EQ(2, root_node->size);
+    EXPECT_EQ("abc", root_node->read_prefix());
+    EXPECT_EQ(3, root_node->prefixLen);
+
+    //check bcd node exists and is leaf
+    ASSERT_TRUE(static_cast<Leaf*>(root_node->children[1]));
+    ASSERT_EQ(NodeType::L, static_cast<Leaf*>(root_node->children[1])->node_type);
+    EXPECT_EQ('x', ((static_cast<Node4*>(root_node))->keys[1]));
+
+    //check bcd node attributes
+    Leaf* bcd_leaf = static_cast<Leaf*>(root_node->children[1]);
+    EXPECT_EQ("abcxyz", bcd_leaf->key);
+    EXPECT_EQ("bye", bcd_leaf->value);
+
+    //check 2nd layer N4 node exists and is N4
+    ASSERT_TRUE(root_node->children[0]);
+    ASSERT_EQ(NodeType::N4, (root_node->children[0])->node_type);
+    EXPECT_EQ('d', ((static_cast<Node4*>(root_node))->keys[0]));
+
+    //check 2nd layer N4 node attributes
+    Node4* h2_n4_node = static_cast<Node4*>(root_node->children[0]);
+    EXPECT_EQ(2, h2_n4_node->size);
+    EXPECT_EQ("", h2_n4_node->read_prefix());
+    EXPECT_EQ(0, h2_n4_node->prefixLen);
+    
+    //check abc node exists and is leaf
+    ASSERT_TRUE(h2_n4_node->children[0]);
+    ASSERT_EQ(NodeType::L, h2_n4_node->children[0]->node_type);
+    EXPECT_EQ('g', ((static_cast<Node4*>(h2_n4_node))->keys[0]));
+    
+    //check abc node exists and is leaf
+    Leaf* abc_node= static_cast<Leaf*>(h2_n4_node->children[0]);
+    EXPECT_EQ("abcdghi", abc_node->key);
+    EXPECT_EQ("hello", abc_node->value);
+
+    //check acd node exists and is leaf
+    ASSERT_TRUE(h2_n4_node->children[1]);
+    ASSERT_EQ(NodeType::L, h2_n4_node->children[1]->node_type);
+    EXPECT_EQ('w', ((static_cast<Node4*>(h2_n4_node))->keys[1]));
+    
+    //check acd node exists and is leaf
+    Leaf* acd_node = static_cast<Leaf*>(h2_n4_node->children[1]);
+    EXPECT_EQ("abcdwxyz", acd_node->key);
+    EXPECT_EQ("what", acd_node->value);
+}
+
+TEST(ARTTest, TripleSearch5) {
+    ART tree;
+    tree.insert("abcdghi", "hello");
+    tree.insert("abcdwxyz", "what");
+    tree.insert("abcxyz", "bye");
+    
+
+    EXPECT_EQ("hello", tree.search("abcdghi"));
+    EXPECT_EQ("", tree.search("cde"));
+    EXPECT_EQ("what", tree.search("abcdwxyz"));
+    EXPECT_EQ("bye", tree.search("abcxyz"));
+    EXPECT_EQ("", tree.search(""));
+     
+}
