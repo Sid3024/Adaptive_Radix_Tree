@@ -57,12 +57,15 @@ TEST(ARTTest, DoubleInsert1) {
     EXPECT_EQ(2, (tree.get_root())->size);
     EXPECT_EQ("", (tree.get_root())->read_prefix());
     EXPECT_EQ(0, (tree.get_root())->prefixLen);
+
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
+    EXPECT_EQ('b', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
     EXPECT_EQ("bcd", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
     EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
 
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
+    EXPECT_EQ('a', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
     EXPECT_EQ("abc", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
     EXPECT_EQ("hello world", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
@@ -82,8 +85,8 @@ TEST(ARTTest, DoubleSearch1) {
 
 TEST(ARTTest, DoubleInsert2) {
     ART tree;
-    tree.insert("bcd", "bye");
-    tree.insert("bef", "hello world");
+    tree.insert("bef", "bye");
+    tree.insert("bcd", "hello world");
     
     EXPECT_EQ(2, tree.get_size());
     EXPECT_EQ(3, tree.get_total_node_count());
@@ -91,24 +94,27 @@ TEST(ARTTest, DoubleInsert2) {
     EXPECT_EQ(2, (tree.get_root())->size);
     EXPECT_EQ("b", (tree.get_root())->read_prefix());
     EXPECT_EQ(1, (tree.get_root())->prefixLen);
+
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
+    EXPECT_EQ('e', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
-    EXPECT_EQ("bcd", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
+    EXPECT_EQ("bef", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
     EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
 
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
+    EXPECT_EQ('c', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
-    EXPECT_EQ("bef", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
+    EXPECT_EQ("bcd", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
     EXPECT_EQ("hello world", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
 }
 
 TEST(ARTTest, DoubleSearch2) {
     ART tree;
-    tree.insert("bcd", "bye");
-    tree.insert("bef", "hello world");
+    tree.insert("bef", "bye");
+    tree.insert("bcd", "hello world");
     
-    EXPECT_EQ("hello world", tree.search("bef"));
-    EXPECT_EQ("bye", tree.search("bcd"));
+    EXPECT_EQ("hello world", tree.search("bcd"));
+    EXPECT_EQ("bye", tree.search("bef"));
     EXPECT_EQ("", tree.search("cde"));
     EXPECT_EQ("", tree.search(""));
 }
@@ -124,18 +130,15 @@ TEST(ARTTest, DoubleInsert3) {
     EXPECT_EQ(2, (tree.get_root())->size);
     EXPECT_EQ("bcdI", (tree.get_root())->read_prefix());
     EXPECT_EQ(4, (tree.get_root())->prefixLen);
-    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
 
+    EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[0]);
     EXPECT_EQ('J', ((static_cast<Node4*>(tree.get_root()))->keys[0]));
-    
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[0])->node_type);
     EXPECT_EQ("bcdIJKL", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->key);
     EXPECT_EQ("bye", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[0]))->value);
 
     EXPECT_TRUE((static_cast<Node4*>(tree.get_root()))->children[1]);
-
     EXPECT_EQ('x', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
-
     EXPECT_EQ(NodeType::L, ((static_cast<Node4*>(tree.get_root()))->children[1])->node_type);
     EXPECT_EQ("bcdIxyz", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->key);
     EXPECT_EQ("hello world", (static_cast<Leaf*>((static_cast<Node4*>(tree.get_root()))->children[1]))->value);
@@ -263,6 +266,7 @@ TEST(ARTTest, TripleInsert1) {
 
     //check bcd node exists and is leaf
     ASSERT_TRUE(static_cast<Leaf*>(root_node->children[1]));
+    EXPECT_EQ('b', ((static_cast<Node4*>(tree.get_root()))->keys[1]));
     ASSERT_EQ(NodeType::L, static_cast<Leaf*>(root_node->children[1])->node_type);
 
     //check bcd node attributes
@@ -272,6 +276,7 @@ TEST(ARTTest, TripleInsert1) {
 
     //check 2nd layer N4 node exists and is N4
     ASSERT_TRUE(root_node->children[0]);
+    EXPECT_EQ('a', ((static_cast<Node4*>(root_node))->keys[0]));
     ASSERT_EQ(NodeType::N4, (root_node->children[0])->node_type);
 
     //check 2nd layer N4 node attributes
@@ -282,6 +287,7 @@ TEST(ARTTest, TripleInsert1) {
     
     //check abc node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[0]);
+    EXPECT_EQ('b', ((static_cast<Node4*>(h2_n4_node))->keys[0]));
     ASSERT_EQ(NodeType::L, h2_n4_node->children[0]->node_type);
     
     //check abc node exists and is leaf
@@ -291,6 +297,7 @@ TEST(ARTTest, TripleInsert1) {
 
     //check acd node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[1]);
+    EXPECT_EQ('c', ((static_cast<Node4*>(h2_n4_node))->keys[1]));
     ASSERT_EQ(NodeType::L, h2_n4_node->children[1]->node_type);
     
     //check acd node exists and is leaf
@@ -333,6 +340,7 @@ TEST(ARTTest, TripleInsert2) {
 
     //check bcd node exists and is leaf
     ASSERT_TRUE(static_cast<Leaf*>(root_node->children[1]));
+    EXPECT_EQ('b', ((static_cast<Node4*>(root_node))->keys[1]));
     ASSERT_EQ(NodeType::L, static_cast<Leaf*>(root_node->children[1])->node_type);
 
     //check bcd node attributes
@@ -343,16 +351,18 @@ TEST(ARTTest, TripleInsert2) {
     //check 2nd layer N4 node exists and is N4
     ASSERT_TRUE(root_node->children[0]);
     ASSERT_EQ(NodeType::N4, (root_node->children[0])->node_type);
+    EXPECT_EQ('a', ((static_cast<Node4*>(root_node))->keys[0]));
 
     //check 2nd layer N4 node attributes
     Node4* h2_n4_node = static_cast<Node4*>(root_node->children[0]);
     EXPECT_EQ(2, h2_n4_node->size);
-    EXPECT_EQ("b", h2_n4_node->read_prefix());
+    EXPECT_EQ("b", h2_n4_node->read_prefix()); //only b, not ab, bcos prefix does not include the discriminating byte
     EXPECT_EQ(1, h2_n4_node->prefixLen);
     
     //check abc node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[0]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[0]->node_type);
+    EXPECT_EQ('c', ((static_cast<Node4*>(h2_n4_node))->keys[0]));
     
     //check abc node exists and is leaf
     Leaf* abc_node= static_cast<Leaf*>(h2_n4_node->children[0]);
@@ -362,6 +372,7 @@ TEST(ARTTest, TripleInsert2) {
     //check acd node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[1]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[1]->node_type);
+    EXPECT_EQ('d', ((static_cast<Node4*>(h2_n4_node))->keys[1]));
     
     //check acd node exists and is leaf
     Leaf* acd_node = static_cast<Leaf*>(h2_n4_node->children[1]);
@@ -405,6 +416,7 @@ TEST(ARTTest, TripleInsert3) {
     //check bcd node exists and is leaf
     ASSERT_TRUE(static_cast<Leaf*>(root_node->children[1]));
     ASSERT_EQ(NodeType::L, static_cast<Leaf*>(root_node->children[1])->node_type);
+    EXPECT_EQ('x', ((static_cast<Node4*>(root_node))->keys[1]));
 
     //check bcd node attributes
     Leaf* bcd_leaf = static_cast<Leaf*>(root_node->children[1]);
@@ -414,6 +426,7 @@ TEST(ARTTest, TripleInsert3) {
     //check 2nd layer N4 node exists and is N4
     ASSERT_TRUE(root_node->children[0]);
     ASSERT_EQ(NodeType::N4, (root_node->children[0])->node_type);
+    EXPECT_EQ('d', ((static_cast<Node4*>(root_node))->keys[0]));
 
     //check 2nd layer N4 node attributes
     Node4* h2_n4_node = static_cast<Node4*>(root_node->children[0]);
@@ -424,6 +437,7 @@ TEST(ARTTest, TripleInsert3) {
     //check abc node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[0]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[0]->node_type);
+    EXPECT_EQ('g', ((static_cast<Node4*>(h2_n4_node))->keys[0]));
     
     //check abc node exists and is leaf
     Leaf* abc_node= static_cast<Leaf*>(h2_n4_node->children[0]);
@@ -433,6 +447,7 @@ TEST(ARTTest, TripleInsert3) {
     //check acd node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[1]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[1]->node_type);
+    EXPECT_EQ('w', ((static_cast<Node4*>(h2_n4_node))->keys[1]));
     
     //check acd node exists and is leaf
     Leaf* acd_node = static_cast<Leaf*>(h2_n4_node->children[1]);
@@ -477,6 +492,7 @@ TEST(ARTTest, TripleInsert4) {
     //check bcd node exists and is leaf
     ASSERT_TRUE(static_cast<Leaf*>(root_node->children[1]));
     ASSERT_EQ(NodeType::L, static_cast<Leaf*>(root_node->children[1])->node_type);
+    EXPECT_EQ('x', ((static_cast<Node4*>(root_node))->keys[1]));
 
     //check bcd node attributes
     Leaf* bcd_leaf = static_cast<Leaf*>(root_node->children[1]);
@@ -486,6 +502,7 @@ TEST(ARTTest, TripleInsert4) {
     //check 2nd layer N4 node exists and is N4
     ASSERT_TRUE(root_node->children[0]);
     ASSERT_EQ(NodeType::N4, (root_node->children[0])->node_type);
+    EXPECT_EQ('d', ((static_cast<Node4*>(root_node))->keys[0]));
 
     //check 2nd layer N4 node attributes
     Node4* h2_n4_node = static_cast<Node4*>(root_node->children[0]);
@@ -496,6 +513,7 @@ TEST(ARTTest, TripleInsert4) {
     //check abc node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[0]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[0]->node_type);
+    EXPECT_EQ('g', ((static_cast<Node4*>(h2_n4_node))->keys[0]));
     
     //check abc node exists and is leaf
     Leaf* abc_node= static_cast<Leaf*>(h2_n4_node->children[0]);
@@ -505,6 +523,7 @@ TEST(ARTTest, TripleInsert4) {
     //check acd node exists and is leaf
     ASSERT_TRUE(h2_n4_node->children[1]);
     ASSERT_EQ(NodeType::L, h2_n4_node->children[1]->node_type);
+    EXPECT_EQ('w', ((static_cast<Node4*>(h2_n4_node))->keys[1]));
     
     //check acd node exists and is leaf
     Leaf* acd_node = static_cast<Leaf*>(h2_n4_node->children[1]);
