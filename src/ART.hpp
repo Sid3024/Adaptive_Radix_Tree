@@ -41,14 +41,15 @@ struct Node {
         return nullptr;
     }
 
-    void update_prefix_len(int new_prefix_len) {
-        if (new_prefix_len > MAX_PREFIX_LEN) {
-            prefixLen = MAX_PREFIX_LEN;
-        } else {
-            prefixLen = new_prefix_len;
-        }
+    bool verify_prefix(std::string expected_prefix) {
+        std::string s = std::string(prefix, std::min(prefixLen, MAX_PREFIX_LEN));
+        return (s == expected_prefix);
     }
-    
+
+    int get_compare_len() {
+        return (prefixLen > MAX_PREFIX_LEN) ? MAX_PREFIX_LEN : prefixLen;
+    }
+
     int get_size() {
         return size;
     }
@@ -56,10 +57,15 @@ struct Node {
         return size == capacity;
     }
     void append_to_prefix(char c) {
+        
         if (prefixLen < MAX_PREFIX_LEN) {
             prefix[prefixLen] = c;
-            prefixLen++;
-        } 
+            
+        } else {
+            std::cout << "ABC: " << c << std::endl << "prefixLen: " << prefixLen << " MAX_PREFIX_LEN: " << MAX_PREFIX_LEN << std::endl;
+            has_prefix_capacity_exceeded = true;
+        }
+        prefixLen++;//even if prefixLen>8 must keep increasing so program knows to skip that number of bytes when passing over the node
     }
     
     char prefix_head() {
@@ -74,12 +80,28 @@ struct Node {
         return s;
     }
 
-    void copy_into_prefix(void* src, size_t size) {
+    void copy_into_prefix(void* src, size_t size, std::string s, int depth) {
+        if (s == "") {
+            memcpy(&prefix, src, size);
+        } else {
+
+        }
         if (size > MAX_PREFIX_LEN) {
             has_prefix_capacity_exceeded = true;
-            size = MAX_PREFIX_LEN;
+            
+        } else {
+            memcpy(&prefix, src, size);
         }
-        std::memcpy(&prefix, src, size);
+        
+    }
+
+    void update_prefix_len(int new_prefix_len) {
+        prefixLen = new_prefix_len;
+        // if (new_prefix_len > MAX_PREFIX_LEN) {
+        //     prefixLen = MAX_PREFIX_LEN;
+        // } else {
+        //     prefixLen = new_prefix_len;
+        // }
     }
 
 };
@@ -229,6 +251,7 @@ private:
     void radix_sort(data* data_arr, int start_idx, int end_idx, int depth, data* radix_sorted_arr, int* size_arr, int* idx_arr, bool* char_is_present_arr);
     void bulk_construct_helper(Node* root_node, int depth, data* data_arr, int start_idx, int end_idx, data* copy_to_arr);
     std::string search_helper(Node* node_ptr, std::string key, int depth, bool has_prefix_capacity_exceeded_somewhere) const;
+    Leaf* find_any_leaf(Node* node_ptr) const;
     char custom_index_string(std::string s, int i) { //returns null char if s.length == i, which is needed for ART logic
         return (s.length() == i) ? '\0' : s[i];
     }

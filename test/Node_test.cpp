@@ -227,8 +227,6 @@ TEST(NodeTest, SingleNodeExpansionAll) {
 }
 
 void check_structure_helper(ART& tree, int node_size, NodeType node_type) {
-    
-    
     Leaf* my_leaf;
 
     EXPECT_TRUE(tree.get_root());
@@ -303,3 +301,102 @@ void check_structure_helper(ART& tree, int node_size, NodeType node_type) {
         EXPECT_EQ(std::to_string(i), tree.search(std::string("a") + static_cast<char>(i)));
     }
 }
+
+TEST(NodeTest, LongPrefixTest) {
+    ART tree;
+    tree.insert("a0123456789ccc", "hello");
+    tree.insert("a0123456789ddd", "bye");
+    
+    tree.insert("b01234567ccc", "hi");
+    tree.insert("b01234567ddd", "see you");
+
+    Leaf* leaf_node;
+
+    EXPECT_TRUE(tree.get_root());
+    EXPECT_EQ(NodeType::N4, tree.get_root()->node_type);
+    Node4* root = static_cast<Node4*>(tree.get_root());
+    
+    EXPECT_EQ("", std::string(root->prefix));
+    EXPECT_EQ(0, root->prefixLen);
+
+    EXPECT_EQ('a', root->keys[0]);
+    EXPECT_TRUE(root->children[0]);
+    EXPECT_EQ(NodeType::N4, root->children[0]->node_type);
+
+    Node4* layer_2_node_a = static_cast<Node4*>(root->children[0]);
+    EXPECT_TRUE(layer_2_node_a->verify_prefix("01234567"));
+    EXPECT_EQ(10, layer_2_node_a->prefixLen);
+    EXPECT_TRUE(layer_2_node_a->has_prefix_capacity_exceeded);
+
+    EXPECT_EQ('c', layer_2_node_a->keys[0]);
+    EXPECT_TRUE(layer_2_node_a->children[0]);
+    EXPECT_EQ(NodeType::L, layer_2_node_a->children[0]->node_type);
+    leaf_node = static_cast<Leaf*>(layer_2_node_a->children[0]);
+    EXPECT_EQ("a0123456789ccc", leaf_node->key);
+    EXPECT_EQ("hello", leaf_node->value);
+
+    EXPECT_EQ('d', layer_2_node_a->keys[1]);
+    EXPECT_TRUE(layer_2_node_a->children[1]);
+    EXPECT_EQ(NodeType::L, layer_2_node_a->children[1]->node_type);
+    leaf_node = static_cast<Leaf*>(layer_2_node_a->children[1]);
+    EXPECT_EQ("a0123456789ddd", leaf_node->key);
+    EXPECT_EQ("bye", leaf_node->value);
+
+
+
+    EXPECT_EQ('b', root->keys[1]);
+    EXPECT_TRUE(root->children[1]);
+    EXPECT_EQ(NodeType::N4, root->children[1]->node_type);
+    Node4* layer_2_node_b = static_cast<Node4*>(root->children[1]);
+
+    EXPECT_TRUE(layer_2_node_b->verify_prefix("01234567"));
+    EXPECT_EQ(8, layer_2_node_b->prefixLen);
+    EXPECT_FALSE(layer_2_node_b->has_prefix_capacity_exceeded);
+
+    EXPECT_EQ('c', layer_2_node_b->keys[0]);
+    EXPECT_TRUE(layer_2_node_b->children[0]);
+    EXPECT_EQ(NodeType::L, layer_2_node_b->children[0]->node_type);
+    leaf_node = static_cast<Leaf*>(layer_2_node_b->children[0]);
+    EXPECT_EQ("b01234567ccc", leaf_node->key);
+    EXPECT_EQ("hi", leaf_node->value);
+
+    EXPECT_EQ('d', layer_2_node_b->keys[1]);
+    EXPECT_TRUE(layer_2_node_b->children[1]);
+    EXPECT_EQ(NodeType::L, layer_2_node_b->children[1]->node_type);
+    leaf_node = static_cast<Leaf*>(layer_2_node_b->children[1]);
+    EXPECT_EQ("b01234567ddd", leaf_node->key);
+    EXPECT_EQ("see you", leaf_node->value);
+
+}
+
+// void verify_node(Node* node_ptr, NodeType expected_node_type, std::string expected_prefix, int expected_prefix_len, char[] c_arr, int[] indices) {
+//     EXPECT_TRUE(node_ptr);
+//     EXPECT_EQ(expected_node_type, node_ptr);
+//     EXPECT_EQ(expected_prefix, node_ptr->prefix);
+//     EXPECT_EQ(expected_prefix_len, node_ptr->prefixLen);
+//     switch (expected_node_type) {
+//         case NodeType::N4: {
+//             Node4* node_ptr = static_cast<Node4*>(node_ptr);
+//             EXPECT_EQ(c, node_ptr->keys[idx]);
+//             EXPECT_TRUE(node_ptr->children[idx]);
+//             break;
+//         }
+//         case NodeType::N16: {
+//             Node16* node_ptr = static_cast<Node16*>(node_ptr);
+//             EXPECT_EQ(c, node_ptr->keys[idx]);
+//             EXPECT_TRUE(node_ptr->children[idx]);
+//             break;
+//         }
+//         case NodeType::N48: {
+//             Node48* node_ptr = static_cast<Node48*>(node_ptr);
+//             EXPECT_TRUE(node_ptr->children[node_ptr->ptr_arr_idx[c]]);
+//             break;
+//         }
+//         case NodeType::N256: {
+//             Node256* node_ptr = static_cast<Node256*>(node_ptr);
+//             EXPECT_TRUE(node_ptr->children[c]);
+//             break;
+//         }
+
+//     }
+// }

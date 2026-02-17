@@ -8,6 +8,16 @@ TEST(ARTTest, InitTree) {
     EXPECT_FALSE(tree.get_root());    
 }
 
+// TEST(ARTTest, NullInsert) {
+
+// }
+
+TEST(ARTTest, NullSearch) {
+    ART tree;
+    tree.insert("", "");
+    EXPECT_EQ("", tree.search(""));
+}
+
 //test: insert (single insert in empty tree)
 //relies on: NIL
 TEST(ARTTest, SingleInsert) {

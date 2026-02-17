@@ -2,7 +2,6 @@
 
 
 
-
 constexpr bool is_debug = false;
 
 
@@ -100,8 +99,8 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
 
         //Node4* inspect_node_ptr = static_cast<Node4*>(*node_dptr);
         
-        new_node_ptr->copy_into_prefix((*node_dptr)->prefix, prefix_match_len);
-        // memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
+        //new_node_ptr->copy_into_prefix((*node_dptr)->prefix, prefix_match_len, "", depth);
+        memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
         // new_node_ptr->prefixLen = prefix_match_len;
         new_node_ptr->update_prefix_len(prefix_match_len);
 
@@ -109,10 +108,21 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
         
         // memcpy((*node_dptr)->prefix, ((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
         // (*node_dptr)->prefixLen = (*node_dptr)->prefixLen - (prefix_match_len+1);
-        
-        (*node_dptr)->copy_into_prefix(((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
         (*node_dptr)->update_prefix_len((*node_dptr)->prefixLen - (prefix_match_len+1)); //note we +1 because the prefix does not contain the discriminating byte used to guide search from the parent node to the curr node
-
+        
+        if ((*node_dptr)->prefixLen > (MAX_PREFIX_LEN - (prefix_match_len+1))) {
+            std::string ref_key = find_any_leaf(*node_dptr)->key;
+            int num_chars_to_copy = ((*node_dptr)->prefixLen > MAX_PREFIX_LEN) ? MAX_PREFIX_LEN : (*node_dptr)->prefixLen;
+            if ((int) (ref_key.size()) - depth < num_chars_to_copy) {
+                num_chars_to_copy = ref_key.size() - depth;
+            }
+            memcpy((*node_dptr)->prefix, ref_key.data() + depth + prefix_match_len + 1, static_cast<size_t>(num_chars_to_copy));
+            //(*node_dptr)->copy_into_prefix(((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen, find_any_leaf(*node_dptr)->key, depth);
+        } else {
+            memcpy((*node_dptr)->prefix, ((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
+        }
+        
+        
         replace(node_dptr, new_node_ptr);
         my_size++;
         my_total_node_count+=2; //adding both leaf and new_node
@@ -142,7 +152,7 @@ std::string ART::search_helper(Node* node_ptr, std::string key, int depth, bool 
     if (!node_ptr) {
         return "";
     } else if (node_ptr->node_type == NodeType::L) {
-        if (has_prefix_capacity_exceeded_somewhere || my_size == 1) { //if my_size == 1, then the cascade down to leaf doesnt verify the key bcos root doesnt have a children arr
+        if (has_prefix_capacity_exceeded_somewhere || my_size == 1) { //if my_size == 1, then the cascade down to leaf doesnt verify the key bcos root points directly to leaf
             if (static_cast<Leaf*>(node_ptr)->verify_key(key)) {
                 return static_cast<Leaf*>(node_ptr)->value;
             } else {
@@ -163,12 +173,6 @@ std::string ART::search_helper(Node* node_ptr, std::string key, int depth, bool 
         return search_helper(new_node_ptr, key, depth+1, has_prefix_capacity_exceeded_somewhere);//depth+1 bcos the prefixLen does not include the discriminating byte
     }
 }
-
-
-
-
-
-
 
 
 Node* ART::find_child(Node* node_ptr, char c) const {
@@ -234,7 +238,8 @@ Node** ART::find_child_dptr(Node* node_ptr, char c) const {
 }
 
 int ART::checkPrefix(Node* node, std::string key, int depth) const {
-    for (int i=0;i<node->prefixLen;i++) {
+    
+    for (int i=0;i<node->get_compare_len();i++) {
         if (key[depth+i] != node->prefix[i]) { //+1 bcos we dont include the discriminating char in prefix //WRONG, depth is alr at position one after the discriminating prefix
             return i;
         }
@@ -265,6 +270,60 @@ Node* ART::expand_node(Node* node_ptr) {
         }
     }
     assert("exited expand_node() without returning Node ptr\n");
+    return nullptr;
+}
+
+Leaf* ART::find_any_leaf(Node* node_ptr) const {
+    switch (node_ptr->node_type) {
+        case NodeType::L: {
+            return static_cast<Leaf*>(node_ptr);
+            break;
+        }
+        case NodeType::N4: {
+            Node4* n4 = static_cast<Node4*>(node_ptr);
+            if (n4->children[0]) {
+                return find_any_leaf(n4->children[0]);
+            } else {
+                return nullptr;
+            }
+            break;
+        }
+        case NodeType::N16: {
+            Node16* n16 = static_cast<Node16*>(node_ptr);
+            if (n16->children[0]) {
+                return find_any_leaf(n16->children[0]);
+            } else {
+                return nullptr;
+            }
+            break;
+        }
+        case NodeType::N48: {
+            Node48* n48 = static_cast<Node48*>(node_ptr);
+            int i=0;
+            while (i<256 && !(n48->children[i])) {
+                i++;
+            }
+            if (i < 256) {
+                return find_any_leaf(n48->children[i]);
+            } else {
+                return nullptr;
+            }
+            break;
+        }
+        case NodeType::N256: {
+            Node256* n256 = static_cast<Node256*>(node_ptr);
+            int i=0;
+            while (i<256 && !(n256->children[i])) {
+                i++;
+            }
+            if (i < 256) {
+                return find_any_leaf(n256->children[i]);
+            } else {
+                return nullptr;
+            }
+            break;
+        }
+    } 
     return nullptr;
 }
 
