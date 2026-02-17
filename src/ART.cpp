@@ -100,11 +100,18 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
 
         //Node4* inspect_node_ptr = static_cast<Node4*>(*node_dptr);
         
-        std::memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
-        new_node_ptr->prefixLen = prefix_match_len;
+        new_node_ptr->copy_into_prefix((*node_dptr)->prefix, prefix_match_len);
+        // memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
+        // new_node_ptr->prefixLen = prefix_match_len;
+        new_node_ptr->update_prefix_len(prefix_match_len);
 
-        (*node_dptr)->prefixLen = (*node_dptr)->prefixLen - (prefix_match_len+1); //note we +1 because the prefix does not contain the discriminating byte used to guide search from the parent node to the curr node
-        memmove((*node_dptr)->prefix, ((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
+
+        
+        // memcpy((*node_dptr)->prefix, ((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
+        // (*node_dptr)->prefixLen = (*node_dptr)->prefixLen - (prefix_match_len+1);
+        
+        (*node_dptr)->copy_into_prefix(((*node_dptr)->prefix)+prefix_match_len+1, (*node_dptr)->prefixLen);
+        (*node_dptr)->update_prefix_len((*node_dptr)->prefixLen - (prefix_match_len+1)); //note we +1 because the prefix does not contain the discriminating byte used to guide search from the parent node to the curr node
 
         replace(node_dptr, new_node_ptr);
         my_size++;
@@ -128,24 +135,32 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
 
 
 std::string ART::search(std::string key) const {
-    return search_helper(my_root, key, 0);
+    return search_helper(my_root, key, 0, my_root->has_prefix_capacity_exceeded);
 }
 
-std::string ART::search_helper(Node* node_ptr, std::string key, int depth) const {
+std::string ART::search_helper(Node* node_ptr, std::string key, int depth, bool has_prefix_capacity_exceeded_somewhere) const {
     if (!node_ptr) {
-        return "aaa";
+        return "";
     } else if (node_ptr->node_type == NodeType::L) {
-        if (static_cast<Leaf*>(node_ptr)->verify_key(key)) {
-            return static_cast<Leaf*>(node_ptr)->value;
+        if (has_prefix_capacity_exceeded_somewhere || my_size == 1) { //if my_size == 1, then the cascade down to leaf doesnt verify the key bcos root doesnt have a children arr
+            if (static_cast<Leaf*>(node_ptr)->verify_key(key)) {
+                return static_cast<Leaf*>(node_ptr)->value;
+            } else {
+                return "";
+            }
         } else {
-            return "bbb";
+            return static_cast<Leaf*>(node_ptr)->value;
         }
+        
     } else if (checkPrefix(node_ptr, key, depth) != node_ptr->prefixLen) {
-        return "ccc";
+        return "";
     } else {
         depth += node_ptr->prefixLen;
         Node* new_node_ptr = find_child(node_ptr, key[depth]);
-        return search_helper(new_node_ptr, key, depth+1);//depth+1 bcos the prefixLen does not include the discriminating byte
+        if (!has_prefix_capacity_exceeded_somewhere && new_node_ptr) { //only if prefix capacity has not yet been exceeded, update whether it has been exceeded based on current node
+            has_prefix_capacity_exceeded_somewhere = new_node_ptr->has_prefix_capacity_exceeded;
+        }
+        return search_helper(new_node_ptr, key, depth+1, has_prefix_capacity_exceeded_somewhere);//depth+1 bcos the prefixLen does not include the discriminating byte
     }
 }
 

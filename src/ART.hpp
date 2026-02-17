@@ -35,10 +35,20 @@ enum NodeType {
 struct Node {
     NodeType node_type;
     int size = 0, prefixLen = 0, capacity = 0;
+    bool has_prefix_capacity_exceeded = false;
     char prefix[MAX_PREFIX_LEN]{}; //do i need to set to ""
     virtual Node* find_child(char c) {
         return nullptr;
     }
+
+    void update_prefix_len(int new_prefix_len) {
+        if (new_prefix_len > MAX_PREFIX_LEN) {
+            prefixLen = MAX_PREFIX_LEN;
+        } else {
+            prefixLen = new_prefix_len;
+        }
+    }
+    
     int get_size() {
         return size;
     }
@@ -64,14 +74,12 @@ struct Node {
         return s;
     }
 
-    bool copy_into_prefix(void* dst, void* src, size_t size) {
-        bool exceeded_prefix_capacity = false;
+    void copy_into_prefix(void* src, size_t size) {
         if (size > MAX_PREFIX_LEN) {
-            exceeded_prefix_capacity = true;
+            has_prefix_capacity_exceeded = true;
             size = MAX_PREFIX_LEN;
         }
-        std::memcpy(dst, src, size);
-        return exceeded_prefix_capacity;
+        std::memcpy(&prefix, src, size);
     }
 
 };
@@ -220,7 +228,7 @@ private:
     Node* shrink_node(Node* node_ptr);
     void radix_sort(data* data_arr, int start_idx, int end_idx, int depth, data* radix_sorted_arr, int* size_arr, int* idx_arr, bool* char_is_present_arr);
     void bulk_construct_helper(Node* root_node, int depth, data* data_arr, int start_idx, int end_idx, data* copy_to_arr);
-    std::string search_helper(Node* node_ptr, std::string key, int depth) const;
+    std::string search_helper(Node* node_ptr, std::string key, int depth, bool has_prefix_capacity_exceeded_somewhere) const;
     char custom_index_string(std::string s, int i) { //returns null char if s.length == i, which is needed for ART logic
         return (s.length() == i) ? '\0' : s[i];
     }
