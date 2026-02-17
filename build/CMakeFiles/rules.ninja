@@ -7,14 +7,14 @@
 
 # =============================================================================
 # Project: AdaptiveRadixTree
-# Configurations: 
+# Configurations: Debug
 # =============================================================================
 # =============================================================================
 
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__art_
+rule CXX_SCAN__art_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -23,7 +23,7 @@ rule CXX_SCAN__art_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__art_
+rule CXX_DYNDEP__art_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=CMakeFiles\art.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -34,7 +34,7 @@ rule CXX_DYNDEP__art_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__art_scanned_
+rule CXX_COMPILER__art_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -44,7 +44,7 @@ rule CXX_COMPILER__art_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__art_unscanned_
+rule CXX_COMPILER__art_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -54,7 +54,7 @@ rule CXX_COMPILER__art_unscanned_
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__art_
+rule CXX_STATIC_LIBRARY_LINKER__art_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\cmake.exe -E rm -f $TARGET_FILE && C:\mingw64\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\mingw64\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -63,7 +63,7 @@ rule CXX_STATIC_LIBRARY_LINKER__art_
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__art_tests_
+rule CXX_SCAN__art_tests_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -72,7 +72,7 @@ rule CXX_SCAN__art_tests_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__art_tests_
+rule CXX_DYNDEP__art_tests_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=CMakeFiles\art_tests.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -83,7 +83,7 @@ rule CXX_DYNDEP__art_tests_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__art_tests_scanned_
+rule CXX_COMPILER__art_tests_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -93,7 +93,7 @@ rule CXX_COMPILER__art_tests_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__art_tests_unscanned_
+rule CXX_COMPILER__art_tests_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -103,7 +103,7 @@ rule CXX_COMPILER__art_tests_unscanned_
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__art_tests_
+rule CXX_EXECUTABLE_LINKER__art_tests_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\c++.exe $FLAGS $LINK_FLAGS $in -o $TARGET_FILE -Wl,--out-implib,$TARGET_IMPLIB -Wl,--major-image-version,0,--minor-image-version,0 $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
@@ -120,7 +120,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__gmock_
+rule CXX_SCAN__gmock_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -129,7 +129,7 @@ rule CXX_SCAN__gmock_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__gmock_
+rule CXX_DYNDEP__gmock_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=_deps\googletest-build\googlemock\CMakeFiles\gmock.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -140,7 +140,7 @@ rule CXX_DYNDEP__gmock_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gmock_scanned_
+rule CXX_COMPILER__gmock_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -150,7 +150,7 @@ rule CXX_COMPILER__gmock_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gmock_unscanned_
+rule CXX_COMPILER__gmock_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -160,7 +160,7 @@ rule CXX_COMPILER__gmock_unscanned_
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__gmock_
+rule CXX_STATIC_LIBRARY_LINKER__gmock_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\cmake.exe -E rm -f $TARGET_FILE && C:\mingw64\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\mingw64\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -169,7 +169,7 @@ rule CXX_STATIC_LIBRARY_LINKER__gmock_
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__gmock_main_
+rule CXX_SCAN__gmock_main_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -178,7 +178,7 @@ rule CXX_SCAN__gmock_main_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__gmock_main_
+rule CXX_DYNDEP__gmock_main_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=_deps\googletest-build\googlemock\CMakeFiles\gmock_main.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -189,7 +189,7 @@ rule CXX_DYNDEP__gmock_main_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gmock_main_scanned_
+rule CXX_COMPILER__gmock_main_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -199,7 +199,7 @@ rule CXX_COMPILER__gmock_main_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gmock_main_unscanned_
+rule CXX_COMPILER__gmock_main_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -209,7 +209,7 @@ rule CXX_COMPILER__gmock_main_unscanned_
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__gmock_main_
+rule CXX_STATIC_LIBRARY_LINKER__gmock_main_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\cmake.exe -E rm -f $TARGET_FILE && C:\mingw64\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\mingw64\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -218,7 +218,7 @@ rule CXX_STATIC_LIBRARY_LINKER__gmock_main_
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__gtest_
+rule CXX_SCAN__gtest_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -227,7 +227,7 @@ rule CXX_SCAN__gtest_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__gtest_
+rule CXX_DYNDEP__gtest_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=_deps\googletest-build\googletest\CMakeFiles\gtest.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -238,7 +238,7 @@ rule CXX_DYNDEP__gtest_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gtest_scanned_
+rule CXX_COMPILER__gtest_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -248,7 +248,7 @@ rule CXX_COMPILER__gtest_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gtest_unscanned_
+rule CXX_COMPILER__gtest_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -258,7 +258,7 @@ rule CXX_COMPILER__gtest_unscanned_
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__gtest_
+rule CXX_STATIC_LIBRARY_LINKER__gtest_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\cmake.exe -E rm -f $TARGET_FILE && C:\mingw64\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\mingw64\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -267,7 +267,7 @@ rule CXX_STATIC_LIBRARY_LINKER__gtest_
 #############################################
 # Rule for generating CXX dependencies.
 
-rule CXX_SCAN__gtest_main_
+rule CXX_SCAN__gtest_main_Debug
   depfile = $DEP_FILE
   command = C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -E -x c++ $in -MT $DYNDEP_INTERMEDIATE_FILE -MD -MF $DEP_FILE -fmodules-ts -fdeps-file=$DYNDEP_INTERMEDIATE_FILE -fdeps-target=$OBJ_FILE -fdeps-format=p1689r5 -o $PREPROCESSED_OUTPUT_FILE
   description = Scanning $in for CXX dependencies
@@ -276,7 +276,7 @@ rule CXX_SCAN__gtest_main_
 #############################################
 # Rule to generate ninja dyndep files for CXX.
 
-rule CXX_DYNDEP__gtest_main_
+rule CXX_DYNDEP__gtest_main_Debug
   command = C:\mingw64\bin\cmake.exe -E cmake_ninja_dyndep --tdi=_deps\googletest-build\googletest\CMakeFiles\gtest_main.dir\CXXDependInfo.json --lang=CXX --modmapfmt=gcc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
@@ -287,7 +287,7 @@ rule CXX_DYNDEP__gtest_main_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gtest_main_scanned_
+rule CXX_COMPILER__gtest_main_scanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -fmodules-ts -fmodule-mapper=$DYNDEP_MODULE_MAP_FILE -MD -fdeps-format=p1689r5 -x c++ -o $out -c $in
@@ -297,7 +297,7 @@ rule CXX_COMPILER__gtest_main_scanned_
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__gtest_main_unscanned_
+rule CXX_COMPILER__gtest_main_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}C:\mingw64\bin\c++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -307,7 +307,7 @@ rule CXX_COMPILER__gtest_main_unscanned_
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__gtest_main_
+rule CXX_STATIC_LIBRARY_LINKER__gtest_main_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\mingw64\bin\cmake.exe -E rm -f $TARGET_FILE && C:\mingw64\bin\ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\mingw64\bin\ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT

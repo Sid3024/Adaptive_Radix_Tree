@@ -100,7 +100,7 @@ bool ART::insert_helper(Node** node_dptr, std::string key, int depth, Leaf* leaf
 
         //Node4* inspect_node_ptr = static_cast<Node4*>(*node_dptr);
         
-        memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
+        std::memcpy(new_node_ptr->prefix, (*node_dptr)->prefix, prefix_match_len);
         new_node_ptr->prefixLen = prefix_match_len;
 
         (*node_dptr)->prefixLen = (*node_dptr)->prefixLen - (prefix_match_len+1); //note we +1 because the prefix does not contain the discriminating byte used to guide search from the parent node to the curr node
@@ -133,18 +133,19 @@ std::string ART::search(std::string key) const {
 
 std::string ART::search_helper(Node* node_ptr, std::string key, int depth) const {
     if (!node_ptr) {
-        return "";
+        return "aaa";
     } else if (node_ptr->node_type == NodeType::L) {
         if (static_cast<Leaf*>(node_ptr)->verify_key(key)) {
             return static_cast<Leaf*>(node_ptr)->value;
         } else {
-            return "";
+            return "bbb";
         }
     } else if (checkPrefix(node_ptr, key, depth) != node_ptr->prefixLen) {
-        return "";
+        return "ccc";
     } else {
         depth += node_ptr->prefixLen;
-        return search_helper(find_child(node_ptr, key[depth]), key, depth+1); //depth+1 bcos the prefixLen does not include the discriminating byte
+        Node* new_node_ptr = find_child(node_ptr, key[depth]);
+        return search_helper(new_node_ptr, key, depth+1);//depth+1 bcos the prefixLen does not include the discriminating byte
     }
 }
 
@@ -168,6 +169,10 @@ Node** ART::find_child_dptr(Node* node_ptr, char c) const {
     switch (node_ptr->node_type) {
         case NodeType::N4: {
             Node4* n4 = static_cast<Node4*>(node_ptr);
+            // for (int i=0;i<n4->size;i++) {
+            //     std::cout << "c: " << c << "  arr: " << n4->keys[i] << "  i: " << i << std::endl;
+            // }
+            //std::cout << std::endl;
             for (int i=0;i<n4->size;i++) {
                 if (c == n4->keys[i]) {
                     return &n4->children[i];
@@ -178,9 +183,12 @@ Node** ART::find_child_dptr(Node* node_ptr, char c) const {
         case NodeType::N16: {
             Node16* n16 = static_cast<Node16*>(node_ptr);
             for (int i=0;i<16;i++) { //TODO: speed up using simd
+                //std::cout << "c: " << c << "  arr: " << n16->keys[i] << "  i: " << i << std::endl;
                 if (c == n16->keys[i]) {
+                    
                     return &n16->children[i];
                 }
+                
             }
             break;
         }

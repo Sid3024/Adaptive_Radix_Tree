@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: AdaptiveRadixTree
-# Configurations: 
+# Configurations: Debug
 # =============================================================================
 
 #############################################
@@ -20,6 +20,11 @@
 
 ninja_required_version = 1.5
 
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
 # =============================================================================
 # Include auxiliary files.
 
@@ -44,9 +49,10 @@ cmake_ninja_workdir = C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/
 
 build cmake_object_order_depends_target_art: phony || .
 
-build CMakeFiles/art.dir/src/ART.cpp.obj: CXX_COMPILER__art_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/src/ART.cpp || cmake_object_order_depends_target_art
+build CMakeFiles/art.dir/src/ART.cpp.obj: CXX_COMPILER__art_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/src/ART.cpp || cmake_object_order_depends_target_art
+  CONFIG = Debug
   DEP_FILE = CMakeFiles\art.dir\src\ART.cpp.obj.d
-  FLAGS = -std=gnu++20
+  FLAGS = -g -std=gnu++20
   INCLUDES = -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/src
   OBJECT_DIR = CMakeFiles\art.dir
   OBJECT_FILE_DIR = CMakeFiles\art.dir\src
@@ -59,7 +65,9 @@ build CMakeFiles/art.dir/src/ART.cpp.obj: CXX_COMPILER__art_unscanned_ C$:/Users
 #############################################
 # Link the static library libart.a
 
-build libart.a: CXX_STATIC_LIBRARY_LINKER__art_ CMakeFiles/art.dir/src/ART.cpp.obj
+build libart.a: CXX_STATIC_LIBRARY_LINKER__art_Debug CMakeFiles/art.dir/src/ART.cpp.obj
+  CONFIG = Debug
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles\art.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -75,16 +83,18 @@ build libart.a: CXX_STATIC_LIBRARY_LINKER__art_ CMakeFiles/art.dir/src/ART.cpp.o
 
 build cmake_object_order_depends_target_art_tests: phony || cmake_object_order_depends_target_art cmake_object_order_depends_target_gtest cmake_object_order_depends_target_gtest_main
 
-build CMakeFiles/art_tests.dir/test/Node_test.cpp.obj: CXX_COMPILER__art_tests_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/test/Node_test.cpp || cmake_object_order_depends_target_art_tests
+build CMakeFiles/art_tests.dir/test/Node_test.cpp.obj: CXX_COMPILER__art_tests_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/test/Node_test.cpp || cmake_object_order_depends_target_art_tests
+  CONFIG = Debug
   DEP_FILE = CMakeFiles\art_tests.dir\test\Node_test.cpp.obj.d
-  FLAGS = -std=gnu++20
+  FLAGS = -g -std=gnu++20
   INCLUDES = -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/src -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = CMakeFiles\art_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\art_tests.dir\test
 
-build CMakeFiles/art_tests.dir/test/ART_test.cpp.obj: CXX_COMPILER__art_tests_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/test/ART_test.cpp || cmake_object_order_depends_target_art_tests
+build CMakeFiles/art_tests.dir/test/ART_test.cpp.obj: CXX_COMPILER__art_tests_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/test/ART_test.cpp || cmake_object_order_depends_target_art_tests
+  CONFIG = Debug
   DEP_FILE = CMakeFiles\art_tests.dir\test\ART_test.cpp.obj.d
-  FLAGS = -std=gnu++20
+  FLAGS = -g -std=gnu++20
   INCLUDES = -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/src -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = CMakeFiles\art_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\art_tests.dir\test
@@ -97,7 +107,9 @@ build CMakeFiles/art_tests.dir/test/ART_test.cpp.obj: CXX_COMPILER__art_tests_un
 #############################################
 # Link the executable art_tests.exe
 
-build art_tests.exe: CXX_EXECUTABLE_LINKER__art_tests_ CMakeFiles/art_tests.dir/test/Node_test.cpp.obj CMakeFiles/art_tests.dir/test/ART_test.cpp.obj | libart.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a libart.a
+build art_tests.exe: CXX_EXECUTABLE_LINKER__art_tests_Debug CMakeFiles/art_tests.dir/test/Node_test.cpp.obj CMakeFiles/art_tests.dir/test/ART_test.cpp.obj | libart.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a libart.a
+  CONFIG = Debug
+  FLAGS = -g
   LINK_LIBRARIES = libart.a  lib/libgtest_main.a  lib/libgtest.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\art_tests.dir
   POST_BUILD = cd .
@@ -279,9 +291,10 @@ build _deps/googletest-build/install/strip: phony _deps/googletest-build/CMakeFi
 
 build cmake_object_order_depends_target_gmock: phony || cmake_object_order_depends_target_gtest
 
-build _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj: CXX_COMPILER__gmock_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/src/gmock-all.cc || cmake_object_order_depends_target_gmock
+build _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj: CXX_COMPILER__gmock_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/src/gmock-all.cc || cmake_object_order_depends_target_gmock
+  CONFIG = Debug
   DEP_FILE = _deps\googletest-build\googlemock\CMakeFiles\gmock.dir\src\gmock-all.cc.obj.d
-  FLAGS = -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+  FLAGS = -g -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
   INCLUDES = -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/include -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock.dir
   OBJECT_FILE_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock.dir\src
@@ -294,7 +307,9 @@ build _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.ob
 #############################################
 # Link the static library lib\libgmock.a
 
-build lib/libgmock.a: CXX_STATIC_LIBRARY_LINKER__gmock_ _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj || lib/libgtest.a
+build lib/libgmock.a: CXX_STATIC_LIBRARY_LINKER__gmock_Debug _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj || lib/libgtest.a
+  CONFIG = Debug
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -310,9 +325,10 @@ build lib/libgmock.a: CXX_STATIC_LIBRARY_LINKER__gmock_ _deps/googletest-build/g
 
 build cmake_object_order_depends_target_gmock_main: phony || cmake_object_order_depends_target_gmock cmake_object_order_depends_target_gtest
 
-build _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj: CXX_COMPILER__gmock_main_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/src/gmock_main.cc || cmake_object_order_depends_target_gmock_main
+build _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj: CXX_COMPILER__gmock_main_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/src/gmock_main.cc || cmake_object_order_depends_target_gmock_main
+  CONFIG = Debug
   DEP_FILE = _deps\googletest-build\googlemock\CMakeFiles\gmock_main.dir\src\gmock_main.cc.obj.d
-  FLAGS = -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+  FLAGS = -g -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
   INCLUDES = -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googlemock -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock_main.dir
   OBJECT_FILE_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock_main.dir\src
@@ -325,7 +341,9 @@ build _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main
 #############################################
 # Link the static library lib\libgmock_main.a
 
-build lib/libgmock_main.a: CXX_STATIC_LIBRARY_LINKER__gmock_main_ _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj || lib/libgmock.a lib/libgtest.a
+build lib/libgmock_main.a: CXX_STATIC_LIBRARY_LINKER__gmock_main_Debug _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj || lib/libgmock.a lib/libgtest.a
+  CONFIG = Debug
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = _deps\googletest-build\googlemock\CMakeFiles\gmock_main.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -423,9 +441,10 @@ build _deps/googletest-build/googlemock/install/strip: phony _deps/googletest-bu
 
 build cmake_object_order_depends_target_gtest: phony || .
 
-build _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj: CXX_COMPILER__gtest_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/src/gtest-all.cc || cmake_object_order_depends_target_gtest
+build _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj: CXX_COMPILER__gtest_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/src/gtest-all.cc || cmake_object_order_depends_target_gtest
+  CONFIG = Debug
   DEP_FILE = _deps\googletest-build\googletest\CMakeFiles\gtest.dir\src\gtest-all.cc.obj.d
-  FLAGS = -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+  FLAGS = -g -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
   INCLUDES = -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -IC:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest.dir
   OBJECT_FILE_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest.dir\src
@@ -438,7 +457,9 @@ build _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.ob
 #############################################
 # Link the static library lib\libgtest.a
 
-build lib/libgtest.a: CXX_STATIC_LIBRARY_LINKER__gtest_ _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj
+build lib/libgtest.a: CXX_STATIC_LIBRARY_LINKER__gtest_Debug _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj
+  CONFIG = Debug
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -454,9 +475,10 @@ build lib/libgtest.a: CXX_STATIC_LIBRARY_LINKER__gtest_ _deps/googletest-build/g
 
 build cmake_object_order_depends_target_gtest_main: phony || cmake_object_order_depends_target_gtest
 
-build _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj: CXX_COMPILER__gtest_main_unscanned_ C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/src/gtest_main.cc || cmake_object_order_depends_target_gtest_main
+build _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj: CXX_COMPILER__gtest_main_unscanned_Debug C$:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/src/gtest_main.cc || cmake_object_order_depends_target_gtest_main
+  CONFIG = Debug
   DEP_FILE = _deps\googletest-build\googletest\CMakeFiles\gtest_main.dir\src\gtest_main.cc.obj.d
-  FLAGS = -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+  FLAGS = -g -std=c++20 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
   INCLUDES = -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest/include -isystem C:/Users/Sid/Documents/GitHub/Adaptive_Radix_Tree/build/_deps/googletest-src/googletest
   OBJECT_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest_main.dir
   OBJECT_FILE_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest_main.dir\src
@@ -469,7 +491,9 @@ build _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main
 #############################################
 # Link the static library lib\libgtest_main.a
 
-build lib/libgtest_main.a: CXX_STATIC_LIBRARY_LINKER__gtest_main_ _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj || lib/libgtest.a
+build lib/libgtest_main.a: CXX_STATIC_LIBRARY_LINKER__gtest_main_Debug _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj || lib/libgtest.a
+  CONFIG = Debug
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = _deps\googletest-build\googletest\CMakeFiles\gtest_main.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

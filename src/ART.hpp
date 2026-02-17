@@ -64,6 +64,16 @@ struct Node {
         return s;
     }
 
+    bool copy_into_prefix(void* dst, void* src, size_t size) {
+        bool exceeded_prefix_capacity = false;
+        if (size > MAX_PREFIX_LEN) {
+            exceeded_prefix_capacity = true;
+            size = MAX_PREFIX_LEN;
+        }
+        std::memcpy(dst, src, size);
+        return exceeded_prefix_capacity;
+    }
+
 };
 
 struct Node4 : public Node {
@@ -95,6 +105,8 @@ struct Node16 : public Node {
         size = n4->get_size();
         node_type = NodeType::N16;
         capacity = 16;
+        prefixLen = n4->prefixLen;
+        std::memcpy(&prefix, &n4->prefix, prefixLen);
     }
     
     Node16(char* init_key_arr, Node** init_children_arr, int copy_size) {
@@ -127,6 +139,8 @@ struct Node48 : public Node {
         size = 16;
         node_type = NodeType::N48;
         capacity = 48;
+        prefixLen = n16->prefixLen;
+        std::memcpy(&prefix, &n16->prefix, prefixLen);
     }
 
     Node48(char* init_key_arr, Node** init_children_arr, int copy_size) {
@@ -168,6 +182,8 @@ struct Node256 : public Node {
         size = 48;
         node_type = NodeType::N256;
         capacity = 256;
+        prefixLen = n48->prefixLen;
+        std::memcpy(&prefix, &n48->prefix, prefixLen);
     }
 };
 
